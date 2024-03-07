@@ -1,0 +1,1 @@
+* No authorizations for admins. Only admins can add products. Can add later on if needed
