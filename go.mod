@@ -2,7 +2,10 @@ module github.com/ArvRao/ecommerce-app
 
 go 1.21.1
 
-require github.com/gofiber/fiber/v2 v2.52.2
+require (
+	github.com/gofiber/fiber/v2 v2.52.2
+	go.mongodb.org/mongo-driver v1.14.0
+)
 
 require (
 	github.com/andybalholm/brotli v1.0.5 // indirect

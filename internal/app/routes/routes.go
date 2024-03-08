@@ -17,22 +17,11 @@ func SetupRoutes() *fiber.App {
 		return c.Status(200).SendString("Pong!")
 	})
 
-	userRoutes(app)
+	users.UserRoutes(app)
 
 	// middleware
 	cartRoutes(app)
 	return app
-}
-
-func userRoutes(app *fiber.App) {
-	userGroup := app.Group("/users")
-	userGroup.Get("/", users.UserList)
-	userGroup.Get("/:id", users.GetUser)
-	userGroup.Get("/signup", users.GetUser)
-	userGroup.Get("/login", users.GetUser)
-	userGroup.Get("/admin/addproduct", users.GetUser)
-	userGroup.Get("/productview", users.GetUser)
-	userGroup.Get("/search", users.GetUser)
 }
 
 func cartRoutes(app *fiber.App) {
