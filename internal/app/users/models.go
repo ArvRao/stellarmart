@@ -1,20 +1,19 @@
 package users
 
-import "time"
-
 type User struct {
-	ID           string    `json:"-"`
-	FirstName    string    `json:"first_name"`
-	LastName     string    `json:"last_name"`
-	Password     string    `json:"-"`
-	Email        string    `json:"email"`
-	Phone        string    `json:"phone"`
-	Token        string    `json:"-"`
-	RefreshToken string    `json:"-"`
-	CreatedAt    time.Time `json:"-"`
-	UpdatedAt    time.Time `json:"-"`
-	UserID       string    `json:"-"`
-	Address      Address   `json:"address"`
+	ID   string `json:"id"`
+	Name string `json:"name"`
+	// FirstName string `json:"first_name"`
+	// LastName  string `json:"last_name"`
+	Password string `json:"password"`
+	// Email        string    `json:"email"`
+	// Phone        string    `json:"phone"`
+	// Token        string    `json:"-"`
+	// RefreshToken string    `json:"-"`
+	// CreatedAt    time.Time `json:"-"`
+	// UpdatedAt    time.Time `json:"-"`
+	// UserID       string    `json:"-"`
+	// Address      Address   `json:"address"`
 }
 
 /* type User struct {
