@@ -3,7 +3,9 @@
 package main
 
 import (
+	"fmt"
 	"log"
+	"os"
 
 	"github.com/ArvRao/ecommerce-app/internal/app/routes"
 	"github.com/ArvRao/ecommerce-app/internal/database"
@@ -18,8 +20,11 @@ func main() {
 	database.DbConnection()
 
 	// Start the Go Fiber app
-	log.Println("Starting your app on :8080...")
-	if err := app.Listen(":8080"); err != nil {
+	port := os.Getenv("PORT")
+	host := os.Getenv("HOST")
+
+	fmt.Sprintln("Starting your app on ", port)
+	if err := app.Listen(host + ":" + port); err != nil {
 		log.Fatalf("Error starting the server: %v", err)
 	}
 }

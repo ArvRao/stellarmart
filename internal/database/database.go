@@ -5,30 +5,32 @@ package database
 import (
 	"database/sql"
 	"fmt"
+	"log"
+	"os"
+
+	"github.com/joho/godotenv"
 
 	_ "github.com/lib/pq"
 )
 
-const (
-	host     = "localhost"
-	port     = 5432
-	user     = "postgres"
-	password = "root"
-	dbname   = "StellarCart"
-)
+func loadEnv() {
+	if err := godotenv.Load(); err != nil {
+		log.Fatalf("Error loading .env file: %v", err)
+	}
+}
 
-// NewDB creates a new PostgreSQL database connection.
 func DbConnection() {
+	loadEnv()
+
 	// database connection
-	psqlConn := fmt.Sprintf("host = %s port = %d user = %s password = %s dbname = %s sslmode=disable", host, port, user, password, dbname)
-	// authentication
+	psqlConn := fmt.Sprintf("host = %s port = %s user = %s password = %s dbname = %s sslmode=disable", os.Getenv("DB_HOST"), os.Getenv("DB_PORT"), os.Getenv("DB_USER"), os.Getenv("DB_PASSWORD"), os.Getenv("DB_NAME"))
 
 	// Connect to database
 	db, err := sql.Open("postgres", psqlConn)
 	checkError(err)
 	defer db.Close()
 
-	insertStmt := InsertCommand()
+	insertStmt := InsertUser()
 	_, e := db.Exec(insertStmt)
 
 	checkError(e)

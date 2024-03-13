@@ -1,5 +1,5 @@
 package database
 
-func InsertCommand() string {
-	return `INSERT INTO "Users" ("Name") VALUES ('Pranav')`
+func InsertUser() string {
+	return `INSERT INTO "Users" ("Name") VALUES ('New user')`
 }
