@@ -1,5 +1,5 @@
 package database
 
 func InsertUser() string {
-	return `INSERT INTO "Users" ("Name") VALUES ('New user')`
+	return `INSERT INTO "Users" ("id", "Name") VALUES (1, 'New user');`
 }

@@ -5,12 +5,14 @@ import (
 )
 
 func UserRoutes(app *fiber.App) {
+	// userController := &UserController{}
 	userGroup := app.Group("/users")
-	userGroup.Get("/", UserList)
-	userGroup.Get("/:id", GetUser)
 	userGroup.Get("/signup", GetUser)
-	userGroup.Get("/login", GetUser)
-	userGroup.Get("/admin/addproduct", GetUser)
-	userGroup.Get("/productview", GetUser)
-	userGroup.Get("/search", GetUser)
+	userGroup.Post("/register", CreateUser)
+	userGroup.Get("/", UsersList)
+	// userGroup.Get("/:id", GetUser)
+	// userGroup.Get("/login", GetUser)
+	// userGroup.Get("/admin/addproduct", GetUser)
+	// userGroup.Get("/productview", GetUser)
+	// userGroup.Get("/search", GetUser)
 }

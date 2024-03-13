@@ -13,10 +13,8 @@ import (
 )
 
 func main() {
-	// Configure routes using Go Fiber
 	app := routes.SetupRoutes()
 
-	// database connection
 	database.DbConnection()
 
 	// Start the Go Fiber app
