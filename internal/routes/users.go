@@ -11,6 +11,8 @@ func NewRouter(userController *controllers.UserController) *fiber.App {
 	router.Route("/users", func(router fiber.Router) {
 		router.Post("/", userController.Create)
 		router.Get("/", userController.FindByAll)
+		router.Delete("/:userId", userController.Delete)
+		router.Patch("/:userId", userController.Update)
 	})
 	return router
 
