@@ -11,8 +11,8 @@ import (
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
 
-	"github.com/ArvRao/ecommerce-app/internal/app/models"
 	"github.com/ArvRao/ecommerce-app/internal/helper"
+	"github.com/ArvRao/ecommerce-app/internal/models"
 	"github.com/joho/godotenv"
 	_ "github.com/lib/pq"
 )

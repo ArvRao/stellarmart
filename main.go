@@ -7,8 +7,8 @@ import (
 	"log"
 	"os"
 
-	"github.com/ArvRao/ecommerce-app/internal/app/routes"
 	"github.com/ArvRao/ecommerce-app/internal/database"
+	"github.com/ArvRao/ecommerce-app/internal/routes"
 	_ "github.com/lib/pq"
 )
 
