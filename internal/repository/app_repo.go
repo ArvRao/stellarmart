@@ -3,7 +3,7 @@ package repository
 import (
 	"fmt"
 
-	"github.com/ArvRao/ecommerce-app/internal/app/users"
+	"github.com/ArvRao/ecommerce-app/internal/app/models"
 	"github.com/ArvRao/ecommerce-app/internal/helper"
 	"gorm.io/gorm"
 )
@@ -14,24 +14,24 @@ type UserRepositoryImpl struct {
 
 // Delete implements UserRepository.
 func (u *UserRepositoryImpl) Delete(userId int) {
-	var user users.User
+	var user models.User
 	result := u.Db.Where("id = ?", userId).Delete(&user)
 	helper.ErrorPanic(result.Error)
 	fmt.Println(result)
 }
 
 // Save implements UserRepository.
-func (u *UserRepositoryImpl) Save(users.User) {
+func (u *UserRepositoryImpl) Save(models.User) {
 	panic("unimplemented")
 }
 
 // Update implements UserRepository.
-func (u *UserRepositoryImpl) Update(users.User) {
+func (u *UserRepositoryImpl) Update(models.User) {
 	panic("unimplemented")
 }
 
-func (u *UserRepositoryImpl) FindAll() []users.User {
-	var user []users.User
+func (u *UserRepositoryImpl) FindAll() []models.User {
+	var user []models.User
 	result := u.Db.Find(&user)
 	helper.ErrorPanic(result.Error)
 	fmt.Println(result)
@@ -39,10 +39,10 @@ func (u *UserRepositoryImpl) FindAll() []users.User {
 }
 
 type UserRepository interface {
-	Save(users.User)
-	Update(users.User)
+	Save(models.User)
+	Update(models.User)
 	Delete(userId int)
-	FindAll() []users.User
+	FindAll() []models.User
 }
 
 func NewUserRepositoryImpl(Db *gorm.DB) UserRepository {
