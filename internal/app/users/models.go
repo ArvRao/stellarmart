@@ -4,7 +4,7 @@ import "gorm.io/gorm"
 
 type User struct {
 	gorm.Model
-	Name string `json:"name" gorm:"text;not null;default:null"`
+	Name string `json:"name" validate:"required,min=2,max=100" gorm:"text;not null;default:null"`
 }
 
 /* type User struct {

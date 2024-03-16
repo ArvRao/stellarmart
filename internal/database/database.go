@@ -7,6 +7,8 @@ import (
 	"log"
 	"os"
 
+	"github.com/ArvRao/ecommerce-app/internal/app/users"
+	"github.com/ArvRao/ecommerce-app/internal/helper"
 	"github.com/joho/godotenv"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
@@ -35,17 +37,13 @@ func DbConnection() {
 	db, err := gorm.Open(postgres.Open(psqlConn), &gorm.Config{
 		Logger: logger.Default.LogMode(logger.Info),
 	})
-	if err != nil {
-		log.Fatal("Failed to connect to database. \n", err)
-		os.Exit(2)
-	}
+	helper.ErrorPanic(err)
+	log.Println("Connected successfully to the database!")
 
-	log.Println("connected")
 	db.Logger = logger.Default.LogMode(logger.Info)
 
 	log.Println("running migrations...")
-	// db.AutoMigrate(&users.User{})
-
+	db.AutoMigrate(&users.User{})
 	DB = DBInstance{
 		Db: db,
 	}

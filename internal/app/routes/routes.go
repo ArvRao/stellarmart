@@ -14,7 +14,10 @@ func SetupRoutes() *fiber.App {
 
 	// Define routes and associate them with handlers
 	app.Get("/ping", func(c *fiber.Ctx) error {
-		return c.Status(200).SendString("Pong!")
+		return c.Status(200).JSON(fiber.Map{
+			"Status":  "success",
+			"message": "welcome to stellarmart",
+		})
 	})
 
 	users.UserRoutes(app)
