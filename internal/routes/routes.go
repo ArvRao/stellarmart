@@ -10,7 +10,10 @@ import (
 // SetupRoutes configures the routes for the application using Go Fiber.
 // setup major routes for the application. Routes from here to other services
 func SetupRoutes() *fiber.App {
+	// userRepository := repository.NewUserRepositoryImpl(db)
+	routes := NewRouter(&controllers.UserController{})
 	app := fiber.New()
+	app.Mount("/api", routes)
 
 	// Define routes and associate them with handlers
 	app.Get("/ping", func(c *fiber.Ctx) error {

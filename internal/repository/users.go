@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/ArvRao/ecommerce-app/internal/data/request"
+	"github.com/ArvRao/ecommerce-app/internal/database"
 	"github.com/ArvRao/ecommerce-app/internal/helper"
 	"github.com/ArvRao/ecommerce-app/internal/models"
 	"gorm.io/gorm"
@@ -24,15 +25,13 @@ func (u *UserRepositoryImpl) Delete(userId int) {
 
 // Save implements UserRepository.
 func (u *UserRepositoryImpl) Save(user models.User) {
-	result := u.Db.Create(&user)
-	helper.ErrorPanic(result.Error)
+	database.DB.Db.Create(&user)
 }
 
 // Update implements UserRepository.
 func (u *UserRepositoryImpl) Update(user models.User) {
 	var updateUser = request.UpdateUserRequest{
-		Id:  int(user.ID),
-		Age: int(user.Age),
+		Id: int(user.ID),
 	}
 	result := u.Db.Model(&user).Updates(updateUser)
 	helper.ErrorPanic(result.Error)
@@ -50,11 +49,9 @@ func (u *UserRepositoryImpl) FindById(userId int) (models.User, error) {
 }
 
 func (u *UserRepositoryImpl) FindAll() []models.User {
-	var user []models.User
-	result := u.Db.Find(&user)
-	helper.ErrorPanic(result.Error)
-	fmt.Println(result)
-	return user
+	users := []models.User{}
+	database.DB.Db.Find(&users)
+	return users
 }
 
 type UserRepository interface {
@@ -65,6 +62,6 @@ type UserRepository interface {
 	FindAll() []models.User
 }
 
-func NewUserRepositoryImpl(Db *gorm.DB) UserRepository {
-	return &UserRepositoryImpl{Db: Db}
+func NewUserRepositoryImpl() UserRepository {
+	return &UserRepositoryImpl{}
 }

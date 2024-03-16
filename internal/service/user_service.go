@@ -1,6 +1,8 @@
 package service
 
 import (
+	"fmt"
+
 	"github.com/ArvRao/ecommerce-app/internal/data/request"
 	"github.com/ArvRao/ecommerce-app/internal/data/response"
 	"github.com/ArvRao/ecommerce-app/internal/helper"
@@ -10,11 +12,11 @@ import (
 )
 
 type UserService interface {
-	Create(user request.CreateUserRequest)
+	Create(user request.CreateUserRequest) models.User
 	Update(user request.UpdateUserRequest)
 	Delete(userId int)
 	FindById(userId int) response.UserResponse
-	FindAll() response.UserResponse
+	FindAll() []models.User
 }
 
 type UserServiceImpl struct {
@@ -22,38 +24,46 @@ type UserServiceImpl struct {
 	validate       *validator.Validate
 }
 
-func (u *UserServiceImpl) Create(user request.CreateUserRequest) {
+func NewUserServiceImpl(userRepository repository.UserRepository, validate *validator.Validate) UserService {
+	return &UserServiceImpl{
+		UserRepository: userRepository,
+		validate:       validate,
+	}
+}
+
+func (u *UserServiceImpl) Create(user request.CreateUserRequest) models.User {
 	err := u.validate.Struct(user)
 	helper.ErrorPanic(err)
 	userModel := models.User{
-		Name: user.UserName,
+		Name: user.Name,
 	}
 	u.UserRepository.Save(userModel)
+	return userModel
 }
 
 func (u *UserServiceImpl) Delete(userId int) {
 	u.UserRepository.Delete(userId)
 }
 
-func (u *UserServiceImpl) FindAll() []response.UserResponse {
-	result := u.UserRepository.FindAll()
-	var users []response.UserResponse
+func (u *UserServiceImpl) FindAll() []models.User {
+	fmt.Println("inside user service")
+	// work on fixing the repository problem
 
-	for _, value := range result {
-		user := response.UserResponse{
-			Id:   int(value.ID),
-			Name: value.Name,
-		}
-		users = append(users, user)
-	}
-	return users
+	result := u.UserRepository.FindAll()
+	fmt.Println("after result", result)
+	// var users []response.UserResponse
+
+	// users := []models.User{}
+	// database.DB.Db.Find(&users)
+	// fmt.Println(users)
+	return result
+
 }
 
 func (u *UserServiceImpl) FindById(userId int) response.UserResponse {
 	userData, err := u.UserRepository.FindById(userId)
 	helper.ErrorPanic(err)
 	userResponse := response.UserResponse{
-		Id:   int(userData.ID),
 		Name: userData.Name,
 	}
 	return userResponse
@@ -62,6 +72,5 @@ func (u *UserServiceImpl) FindById(userId int) response.UserResponse {
 func (u *UserServiceImpl) Update(user request.UpdateUserRequest) {
 	userData, err := u.UserRepository.FindById(user.Id)
 	helper.ErrorPanic(err)
-	userData.Age = uint16(user.Age)
 	u.UserRepository.Update(userData)
 }

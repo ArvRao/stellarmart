@@ -1,7 +1,7 @@
 package request
 
 type CreateUserRequest struct {
-	UserName string `validate:"required,min=2,max=28" json:"user"`
+	Name string `validate:"required,min=2,max=28" json:"name"`
 }
 
 type UpdateUserRequest struct {
