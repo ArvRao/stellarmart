@@ -1,8 +1,6 @@
 package service
 
 import (
-	"fmt"
-
 	"github.com/ArvRao/ecommerce-app/internal/data/request"
 	"github.com/ArvRao/ecommerce-app/internal/data/response"
 	"github.com/ArvRao/ecommerce-app/internal/helper"
@@ -12,7 +10,7 @@ import (
 )
 
 type UserService interface {
-	Create(user request.CreateUserRequest) models.User
+	Create(user request.CreateUserRequest) string
 	Update(user request.UpdateUserRequest)
 	Delete(userId int)
 	FindById(userId int) response.UserResponse
@@ -31,14 +29,14 @@ func NewUserServiceImpl(userRepository repository.UserRepository, validate *vali
 	}
 }
 
-func (u *UserServiceImpl) Create(user request.CreateUserRequest) models.User {
+func (u *UserServiceImpl) Create(user request.CreateUserRequest) string {
 	err := u.validate.Struct(user)
 	helper.ErrorPanic(err)
 	userModel := models.User{
 		Name: user.Name,
 	}
 	u.UserRepository.Save(userModel)
-	return userModel
+	return userModel.Name
 }
 
 func (u *UserServiceImpl) Delete(userId int) {
@@ -46,18 +44,8 @@ func (u *UserServiceImpl) Delete(userId int) {
 }
 
 func (u *UserServiceImpl) FindAll() []models.User {
-	fmt.Println("inside user service")
-	// work on fixing the repository problem
-
 	result := u.UserRepository.FindAll()
-	fmt.Println("after result", result)
-	// var users []response.UserResponse
-
-	// users := []models.User{}
-	// database.DB.Db.Find(&users)
-	// fmt.Println(users)
 	return result
-
 }
 
 func (u *UserServiceImpl) FindById(userId int) response.UserResponse {

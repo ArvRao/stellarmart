@@ -32,13 +32,12 @@ func (controllers *UserController) Create(ctx *fiber.Ctx) error {
 	err := ctx.BodyParser(&createUserRequest)
 	helper.ErrorPanic(err)
 
-	user := controllers.userService.Create(createUserRequest)
+	userName := controllers.userService.Create(createUserRequest)
 
 	webResponse := response.Response{
 		Code:    200,
 		Status:  "Ok",
-		Message: "Successfully created new user",
-		Data:    user,
+		Message: fmt.Sprintf("Successfully created new user %v", userName),
 	}
 	return ctx.Status(fiber.StatusCreated).JSON(webResponse)
 }
@@ -85,7 +84,6 @@ func (controllers *UserController) Delete(ctx *fiber.Ctx) error {
 }
 */
 func (controllers *UserController) FindByAll(ctx *fiber.Ctx) error {
-	fmt.Println("inside findby all")
 	userResponse := controllers.userService.FindAll()
 	webResponse := response.Response{
 		Code:    200,

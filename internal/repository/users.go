@@ -2,7 +2,6 @@ package repository
 
 import (
 	"errors"
-	"fmt"
 
 	"github.com/ArvRao/ecommerce-app/internal/data/request"
 	"github.com/ArvRao/ecommerce-app/internal/database"
@@ -15,12 +14,19 @@ type UserRepositoryImpl struct {
 	Db *gorm.DB
 }
 
+type UserRepository interface {
+	Save(models.User)
+	Update(models.User)
+	Delete(userId int)
+	FindById(userId int) (models.User, error)
+	FindAll() []models.User
+}
+
 // Delete implements UserRepository.
 func (u *UserRepositoryImpl) Delete(userId int) {
 	var user models.User
 	result := u.Db.Where("id = ?", userId).Delete(&user)
 	helper.ErrorPanic(result.Error)
-	fmt.Println(result)
 }
 
 // Save implements UserRepository.
@@ -54,14 +60,6 @@ func (u *UserRepositoryImpl) FindAll() []models.User {
 	return users
 }
 
-type UserRepository interface {
-	Save(models.User)
-	Update(models.User)
-	Delete(userId int)
-	FindById(userId int) (models.User, error)
-	FindAll() []models.User
-}
-
-func NewUserRepositoryImpl() UserRepository {
-	return &UserRepositoryImpl{}
+func NewUserRepositoryImpl(db *gorm.DB) UserRepository {
+	return &UserRepositoryImpl{Db: db}
 }
