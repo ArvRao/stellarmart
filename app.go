@@ -6,11 +6,11 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/ArvRao/ecommerce-app/internal/controllers"
-	"github.com/ArvRao/ecommerce-app/internal/repository"
-	"github.com/ArvRao/ecommerce-app/internal/service"
+	"github.com/ArvRao/ecommerce-app/internal/users/controllers"
+	repository "github.com/ArvRao/ecommerce-app/internal/users/repositories"
+	service "github.com/ArvRao/ecommerce-app/internal/users/services"
 	"github.com/ArvRao/ecommerce-app/pkg/database"
-	"github.com/ArvRao/ecommerce-app/pkg/router"
+	"github.com/ArvRao/ecommerce-app/pkg/routes"
 	"github.com/go-playground/validator"
 	"github.com/gofiber/fiber/v2"
 	"github.com/joho/godotenv"
@@ -42,16 +42,14 @@ func InitApp() {
 
 	userController := controllers.NewUserController(userService)
 	// update here to point to router -> router.go file
-	routes := router.NewRouter(userController)
+	app := routes.NewRouter(userController)
 	// routes := routes.NewRouter(userController)
-	app := fiber.New()
 	app.Get("/ping", func(c *fiber.Ctx) error {
 		return c.Status(200).JSON(fiber.Map{
 			"Status":  "success",
 			"message": "welcome to stellarmart",
 		})
 	})
-	app.Mount("/api", routes)
 	// Start the Go Fiber app
 	port := os.Getenv("PORT")
 	host := os.Getenv("HOST")
