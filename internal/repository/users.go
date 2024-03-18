@@ -3,9 +3,9 @@ package repository
 import (
 	"errors"
 
-	"github.com/ArvRao/ecommerce-app/internal/database"
 	"github.com/ArvRao/ecommerce-app/internal/helper"
 	"github.com/ArvRao/ecommerce-app/internal/models"
+	"github.com/ArvRao/ecommerce-app/pkg/database"
 	"gorm.io/gorm"
 )
 

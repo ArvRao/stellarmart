@@ -6,10 +6,10 @@ import (
 
 	"github.com/ArvRao/ecommerce-app/internal/data/request"
 	"github.com/ArvRao/ecommerce-app/internal/data/response"
-	"github.com/ArvRao/ecommerce-app/internal/database"
 	"github.com/ArvRao/ecommerce-app/internal/helper"
 	"github.com/ArvRao/ecommerce-app/internal/models"
 	"github.com/ArvRao/ecommerce-app/internal/service"
+	"github.com/ArvRao/ecommerce-app/pkg/database"
 	"github.com/gofiber/fiber/v2"
 )
 

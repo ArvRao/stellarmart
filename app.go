@@ -7,10 +7,10 @@ import (
 	"path/filepath"
 
 	"github.com/ArvRao/ecommerce-app/internal/controllers"
-	"github.com/ArvRao/ecommerce-app/internal/database"
 	"github.com/ArvRao/ecommerce-app/internal/repository"
-	"github.com/ArvRao/ecommerce-app/internal/routes"
 	"github.com/ArvRao/ecommerce-app/internal/service"
+	"github.com/ArvRao/ecommerce-app/pkg/database"
+	"github.com/ArvRao/ecommerce-app/pkg/router"
 	"github.com/go-playground/validator"
 	"github.com/gofiber/fiber/v2"
 	"github.com/joho/godotenv"
@@ -31,7 +31,6 @@ func InitApp() {
 	if err := godotenv.Load(envPath); err != nil {
 		log.Fatalf("Error loading .env file: %v", err)
 	}
-
 	database.DbConnection()
 	// app := routes.SetupRoutes()
 	validate := validator.New()
@@ -42,8 +41,9 @@ func InitApp() {
 	userService := service.NewUserServiceImpl(userRepository, validate)
 
 	userController := controllers.NewUserController(userService)
-
-	routes := routes.NewRouter(userController)
+	// update here to point to router -> router.go file
+	routes := router.NewRouter(userController)
+	// routes := routes.NewRouter(userController)
 	app := fiber.New()
 	app.Get("/ping", func(c *fiber.Ctx) error {
 		return c.Status(200).JSON(fiber.Map{
