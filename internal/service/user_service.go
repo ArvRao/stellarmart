@@ -11,7 +11,7 @@ import (
 
 type UserService interface {
 	Create(user request.CreateUserRequest) string
-	Update(user request.UpdateUserRequest)
+	Update(id int, name string) error
 	Delete(userId int)
 	FindById(userId int) response.UserResponse
 	FindAll() []models.User
@@ -57,8 +57,10 @@ func (u *UserServiceImpl) FindById(userId int) response.UserResponse {
 	return userResponse
 }
 
-func (u *UserServiceImpl) Update(user request.UpdateUserRequest) {
-	userData, err := u.UserRepository.FindById(user.Id)
-	helper.ErrorPanic(err)
-	u.UserRepository.Update(userData)
+func (u *UserServiceImpl) Update(id int, name string) error {
+	_, err := u.UserRepository.FindById(id)
+	if err != nil {
+		return err
+	}
+	return u.UserRepository.Update(id, name)
 }

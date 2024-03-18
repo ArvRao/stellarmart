@@ -3,7 +3,6 @@ package repository
 import (
 	"errors"
 
-	"github.com/ArvRao/ecommerce-app/internal/data/request"
 	"github.com/ArvRao/ecommerce-app/internal/database"
 	"github.com/ArvRao/ecommerce-app/internal/helper"
 	"github.com/ArvRao/ecommerce-app/internal/models"
@@ -16,7 +15,7 @@ type UserRepositoryImpl struct {
 
 type UserRepository interface {
 	Save(models.User)
-	Update(models.User)
+	Update(id int, name string) error
 	Delete(userId int)
 	FindById(userId int) (models.User, error)
 	FindAll() []models.User
@@ -35,18 +34,15 @@ func (u *UserRepositoryImpl) Save(user models.User) {
 }
 
 // Update implements UserRepository.
-func (u *UserRepositoryImpl) Update(user models.User) {
-	var updateUser = request.UpdateUserRequest{
-		Id: int(user.ID),
-	}
-	result := u.Db.Model(&user).Updates(updateUser)
-	helper.ErrorPanic(result.Error)
-
+func (u *UserRepositoryImpl) Update(id int, name string) error {
+	result := u.Db.Model(&models.User{}).Where("id = ?", id).Update("name", name)
+	return result.Error
 }
 
 func (u *UserRepositoryImpl) FindById(userId int) (models.User, error) {
 	var user models.User
-	result := u.Db.Find(&user, userId)
+	// result := u.Db.Find(&user, userId)
+	result := u.Db.First(&user, userId)
 	if result != nil {
 		return user, nil
 	} else {

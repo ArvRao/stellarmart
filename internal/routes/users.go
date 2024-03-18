@@ -13,6 +13,7 @@ func NewRouter(userController *controllers.UserController) *fiber.App {
 		router.Get("/", userController.FindByAll)
 		router.Delete("/:userId", userController.Delete)
 		router.Patch("/:userId", userController.Update)
+		router.Get("/:userId", userController.GetById)
 	})
 	return router
 

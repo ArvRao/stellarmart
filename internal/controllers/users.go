@@ -51,17 +51,16 @@ func (controllers *UserController) Update(ctx *fiber.Ctx) error {
 	id, err := strconv.Atoi(userId)
 	helper.ErrorPanic(err)
 
-	updateUserRequest.Id = id
-
-	controllers.userService.Update(updateUserRequest)
+	err = controllers.userService.Update(id, updateUserRequest.Name)
+	helper.ErrorPanic(err)
 
 	webResponse := response.Response{
 		Code:    200,
 		Status:  "Ok",
 		Message: "Updated users",
-		Data:    nil,
+		Data:    updateUserRequest.Name,
 	}
-	return ctx.Status(fiber.StatusCreated).JSON(webResponse)
+	return ctx.Status(fiber.StatusOK).JSON(webResponse)
 }
 
 func (controllers *UserController) Delete(ctx *fiber.Ctx) error {
@@ -78,11 +77,23 @@ func (controllers *UserController) Delete(ctx *fiber.Ctx) error {
 	return ctx.Status(fiber.StatusAccepted).JSON(webResponse)
 }
 
-/*
-	func (controllers *UserController) FindById(ctx *fiber.Ctx) error {
+func (controllers *UserController) GetById(ctx *fiber.Ctx) error {
+	userId := ctx.Params("userId")
+	id, err := strconv.Atoi(userId)
+	helper.ErrorPanic(err)
 
+	user := controllers.userService.FindById(id)
+	helper.ErrorPanic(err)
+
+	webResponse := response.Response{
+		Code:    200,
+		Status:  "Ok",
+		Message: "User fetched successfully",
+		Data:    user,
+	}
+	return ctx.Status(fiber.StatusOK).JSON(webResponse)
 }
-*/
+
 func (controllers *UserController) FindByAll(ctx *fiber.Ctx) error {
 	userResponse := controllers.userService.FindAll()
 	webResponse := response.Response{
