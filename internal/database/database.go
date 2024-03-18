@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"path/filepath"
 
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
@@ -18,7 +19,15 @@ import (
 )
 
 func loadEnv() {
-	if err := godotenv.Load(); err != nil {
+	root, err := os.Getwd()
+	if err != nil {
+		log.Fatalf("Error getting working directory: %v", err)
+	}
+	// Construct the path to the .env file
+	envPath := filepath.Join(root, ".env")
+
+	// Load the .env file from the specified path
+	if err := godotenv.Load(envPath); err != nil {
 		log.Fatalf("Error loading .env file: %v", err)
 	}
 }
@@ -30,7 +39,7 @@ type DBInstance struct {
 var DB DBInstance
 
 func DbConnection() {
-	loadEnv()
+	// loadEnv()
 	psqlConn := fmt.Sprintf("host = %s port = %s user = %s password = %s dbname = %s sslmode=disable TimeZone=Asia/Kolkata", os.Getenv("DB_HOST"), os.Getenv("DB_PORT"), os.Getenv("DB_USER"), os.Getenv("DB_PASSWORD"), os.Getenv("DB_NAME"))
 
 	// Connect to database
