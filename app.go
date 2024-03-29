@@ -6,7 +6,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/ArvRao/ecommerce-app/internal/users/controllers"
+	Users "github.com/ArvRao/ecommerce-app/internal/users/controllers"
 	repository "github.com/ArvRao/ecommerce-app/internal/users/repositories"
 	service "github.com/ArvRao/ecommerce-app/internal/users/services"
 	"github.com/ArvRao/ecommerce-app/pkg/database"
@@ -40,7 +40,7 @@ func InitApp() {
 
 	userService := service.NewUserServiceImpl(userRepository, validate)
 
-	userController := controllers.NewUserController(userService)
+	userController := Users.NewUserController(userService)
 	// update here to point to router -> router.go file
 	app := routes.NewRouter(userController)
 	// routes := routes.NewRouter(userController)

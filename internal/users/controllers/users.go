@@ -1,4 +1,4 @@
-package controllers
+package Users
 
 import (
 	"fmt"
@@ -7,7 +7,7 @@ import (
 	"github.com/ArvRao/ecommerce-app/internal/helper"
 	"github.com/ArvRao/ecommerce-app/internal/users/data/requests"
 	"github.com/ArvRao/ecommerce-app/internal/users/data/responses"
-	"github.com/ArvRao/ecommerce-app/internal/users/models"
+	Users "github.com/ArvRao/ecommerce-app/internal/users/models"
 	service "github.com/ArvRao/ecommerce-app/internal/users/services"
 	"github.com/ArvRao/ecommerce-app/pkg/database"
 	"github.com/gofiber/fiber/v2"
@@ -117,7 +117,7 @@ func (controllers *UserController) FindByAll(ctx *fiber.Ctx) error {
 // }
 
 func UsersList(c *fiber.Ctx) error {
-	users := []models.User{}
+	users := []Users.User{}
 	database.DB.Db.Find(&users)
 	return c.Status(200).JSON(users)
 }

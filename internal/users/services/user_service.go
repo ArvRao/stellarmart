@@ -1,10 +1,10 @@
-package service
+package Users
 
 import (
 	"github.com/ArvRao/ecommerce-app/internal/helper"
 	"github.com/ArvRao/ecommerce-app/internal/users/data/requests"
 	"github.com/ArvRao/ecommerce-app/internal/users/data/responses"
-	"github.com/ArvRao/ecommerce-app/internal/users/models"
+	Users "github.com/ArvRao/ecommerce-app/internal/users/models"
 	repository "github.com/ArvRao/ecommerce-app/internal/users/repositories"
 
 	"github.com/go-playground/validator"
@@ -15,7 +15,7 @@ type UserService interface {
 	Update(id int, name string) error
 	Delete(userId int)
 	FindById(userId int) responses.UserResponse
-	FindAll() []models.User
+	FindAll() []Users.User
 }
 
 type UserServiceImpl struct {
@@ -33,7 +33,7 @@ func NewUserServiceImpl(userRepository repository.UserRepository, validate *vali
 func (u *UserServiceImpl) Create(user requests.CreateUserRequest) string {
 	err := u.validate.Struct(user)
 	helper.ErrorPanic(err)
-	userModel := models.User{
+	userModel := Users.User{
 		Name: user.Name,
 	}
 	u.UserRepository.Save(userModel)
@@ -44,7 +44,7 @@ func (u *UserServiceImpl) Delete(userId int) {
 	u.UserRepository.Delete(userId)
 }
 
-func (u *UserServiceImpl) FindAll() []models.User {
+func (u *UserServiceImpl) FindAll() []Users.User {
 	result := u.UserRepository.FindAll()
 	return result
 }

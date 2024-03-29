@@ -13,7 +13,8 @@ import (
 	"gorm.io/gorm/logger"
 
 	"github.com/ArvRao/ecommerce-app/internal/helper"
-	"github.com/ArvRao/ecommerce-app/internal/users/models"
+	Orders "github.com/ArvRao/ecommerce-app/internal/orders/models"
+	Users "github.com/ArvRao/ecommerce-app/internal/users/models"
 	"github.com/joho/godotenv"
 	_ "github.com/lib/pq"
 )
@@ -52,7 +53,7 @@ func DbConnection() {
 	db.Logger = logger.Default.LogMode(logger.Info)
 
 	log.Println("running migrations...")
-	db.AutoMigrate(&models.User{})
+	db.AutoMigrate(&Users.User{}, &Orders.Order{})
 	DB = DBInstance{
 		Db: db,
 	}
