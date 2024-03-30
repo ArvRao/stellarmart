@@ -6,6 +6,9 @@ import (
 	"os"
 	"path/filepath"
 
+	OrdersController "github.com/ArvRao/ecommerce-app/internal/orders/controllers"
+	Orders "github.com/ArvRao/ecommerce-app/internal/orders/repositories"
+	OrdersService "github.com/ArvRao/ecommerce-app/internal/orders/services"
 	Users "github.com/ArvRao/ecommerce-app/internal/users/controllers"
 	repository "github.com/ArvRao/ecommerce-app/internal/users/repositories"
 	service "github.com/ArvRao/ecommerce-app/internal/users/services"
@@ -37,12 +40,15 @@ func InitApp() {
 
 	// init repo, service, controller
 	userRepository := repository.NewUserRepositoryImpl(database.DB.Db)
+	orderRepository := Orders.NewOrderRepositoryImpl(database.DB.Db)
 
 	userService := service.NewUserServiceImpl(userRepository, validate)
+	orderService := OrdersService.NewOrderServiceImpl(orderRepository, validate)
 
 	userController := Users.NewUserController(userService)
+	orderController := OrdersController.NewOrderController(orderService)
 	// update here to point to router -> router.go file
-	app := routes.NewRouter(userController)
+	app := routes.NewRouter(userController, orderController)
 	// routes := routes.NewRouter(userController)
 	app.Get("/ping", func(c *fiber.Ctx) error {
 		return c.Status(200).JSON(fiber.Map{
