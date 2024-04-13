@@ -7,9 +7,10 @@ import (
 
 func SetupOrderRoutes(api fiber.Router, orderController *Orders.OrderController) {
 	userRoutes := api.Group("/orders")
-	userRoutes.Get("/", orderController.FindByAll)
+	userRoutes.Get("/all", orderController.FindByAll)
 	userRoutes.Post("/", orderController.Create)
 	userRoutes.Delete("/:orderId", orderController.Delete)
 	// userRoutes.Patch("/:userId", orderController.Update)
-	userRoutes.Get("/:orderId", orderController.GetById)
+	// GET /api/orders?orderId=3
+	userRoutes.Get("/", orderController.GetById)
 }

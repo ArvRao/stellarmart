@@ -8,11 +8,12 @@ import (
 	"github.com/ArvRao/ecommerce-app/internal/orders/data/responses"
 	Orders "github.com/ArvRao/ecommerce-app/internal/orders/models"
 	repository "github.com/ArvRao/ecommerce-app/internal/orders/repositories"
+	Users "github.com/ArvRao/ecommerce-app/internal/users/models"
 	"github.com/go-playground/validator"
 )
 
 type OrderService interface {
-	Create(order requests.CreateOrderRequest) uint
+	Create(order requests.CreateOrderRequest) Users.User
 	Update(id int, ordersum int) error
 	Delete(orderId int)
 	FindById(orderId int) responses.OrderResponse
@@ -31,7 +32,7 @@ func NewOrderServiceImpl(orderRepository repository.OrderRepository, validate *v
 	}
 }
 
-func (u *OrderServiceImpl) Create(order requests.CreateOrderRequest) uint {
+func (u *OrderServiceImpl) Create(order requests.CreateOrderRequest) Users.User {
 	err := u.validate.Struct(order)
 	helper.ErrorPanic(err)
 	orderModel := Orders.Order{
@@ -39,9 +40,7 @@ func (u *OrderServiceImpl) Create(order requests.CreateOrderRequest) uint {
 		UserID:   order.UserID,
 	}
 	u.OrderRepository.Save(orderModel)
-	fmt.Println(orderModel.ID)
-	// not working here, returning 0
-	return orderModel.ID
+	return orderModel.User
 }
 
 func (u *OrderServiceImpl) Delete(userId int) {

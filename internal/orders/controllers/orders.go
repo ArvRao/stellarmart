@@ -24,13 +24,11 @@ func (controllers *OrderController) Create(ctx *fiber.Ctx) error {
 	err := ctx.BodyParser(&createOrderRequest)
 	helper.ErrorPanic(err)
 
-	order := controllers.orderService.Create(createOrderRequest)
-
-	// check the number
+	_ = controllers.orderService.Create(createOrderRequest)
 	webResponse := responses.Response{
 		Code:    200,
 		Status:  "Ok",
-		Message: fmt.Sprintf("Successfully created new order %v", order),
+		Message: fmt.Sprintf("Successfully created new order"),
 	}
 	return ctx.Status(fiber.StatusCreated).JSON(webResponse)
 }
@@ -50,7 +48,7 @@ func (controllers *OrderController) Delete(ctx *fiber.Ctx) error {
 }
 
 func (controllers *OrderController) GetById(ctx *fiber.Ctx) error {
-	orderId := ctx.Params("orderId")
+	orderId := ctx.Query("orderId")
 	id, err := strconv.Atoi(orderId)
 	helper.ErrorPanic(err)
 

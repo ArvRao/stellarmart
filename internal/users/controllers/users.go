@@ -7,9 +7,7 @@ import (
 	"github.com/ArvRao/ecommerce-app/internal/helper"
 	"github.com/ArvRao/ecommerce-app/internal/users/data/requests"
 	"github.com/ArvRao/ecommerce-app/internal/users/data/responses"
-	Users "github.com/ArvRao/ecommerce-app/internal/users/models"
 	service "github.com/ArvRao/ecommerce-app/internal/users/services"
-	"github.com/ArvRao/ecommerce-app/pkg/database"
 	"github.com/gofiber/fiber/v2"
 )
 
@@ -103,21 +101,4 @@ func (controllers *UserController) FindByAll(ctx *fiber.Ctx) error {
 		Data:    userResponse,
 	}
 	return ctx.Status(fiber.StatusAccepted).JSON(webResponse)
-}
-
-// func CreateUser(c *fiber.Ctx) error {
-// 	user := new(models.User)
-// 	if err := c.BodyParser(user); err != nil {
-// 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-// 			"message": err.Error(),
-// 		})
-// 	}
-// 	database.DB.Db.Create(&user)
-// 	return c.Status(201).JSON(user)
-// }
-
-func UsersList(c *fiber.Ctx) error {
-	users := []Users.User{}
-	database.DB.Db.Find(&users)
-	return c.Status(200).JSON(users)
 }
