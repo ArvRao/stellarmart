@@ -13,6 +13,7 @@ func NewRouter(userController *Users.UserController, orderController *Orders.Ord
 	SetupUserRoutes(api, userController)
 	// order routes
 	SetupOrderRoutes(api, orderController)
+	// cart routes
 
 	return app
 }

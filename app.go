@@ -38,7 +38,7 @@ func InitApp() {
 	// app := routes.SetupRoutes()
 	validate := validator.New()
 
-	// init repo, service, controller
+	// init repository, service, controller
 	userRepository := repository.NewUserRepositoryImpl(database.DB.Db)
 	orderRepository := Orders.NewOrderRepositoryImpl(database.DB.Db)
 

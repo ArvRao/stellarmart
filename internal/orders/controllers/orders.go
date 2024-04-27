@@ -53,16 +53,21 @@ func (controllers *OrderController) GetById(ctx *fiber.Ctx) error {
 	helper.ErrorPanic(err)
 
 	order := controllers.orderService.FindById(id)
+	message := ""
 	if order.Id == 0 {
 		fmt.Println("Given order does not exist")
+		message = "Given order does not exist"
+	} else {
+		message = "Order fetched successfully"
 	}
 	helper.ErrorPanic(err)
-
 	webResponse := responses.Response{
 		Code:    200,
 		Status:  "Ok",
-		Message: "Order fetched successfully",
-		Data:    order,
+		Message: message,
+	}
+	if order.Id != 0 {
+		webResponse.Data = order
 	}
 	return ctx.Status(fiber.StatusOK).JSON(webResponse)
 }
