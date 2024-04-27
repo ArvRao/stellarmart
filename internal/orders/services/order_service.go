@@ -17,7 +17,7 @@ type OrderService interface {
 	Update(id int, ordersum int) error
 	Delete(orderId int)
 	FindById(orderId int) responses.OrderResponse
-	FindAll() []Orders.Order
+	FindAll() []responses.OrderResponse
 }
 
 type OrderServiceImpl struct {
@@ -47,7 +47,7 @@ func (u *OrderServiceImpl) Delete(userId int) {
 	u.OrderRepository.Delete(userId)
 }
 
-func (u *OrderServiceImpl) FindAll() []Orders.Order {
+func (u *OrderServiceImpl) FindAll() []responses.OrderResponse {
 	result := u.OrderRepository.FindAll()
 	return result
 }

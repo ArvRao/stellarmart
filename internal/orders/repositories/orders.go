@@ -4,6 +4,7 @@ import (
 	"errors"
 
 	"github.com/ArvRao/ecommerce-app/internal/helper"
+	"github.com/ArvRao/ecommerce-app/internal/orders/data/responses"
 	Orders "github.com/ArvRao/ecommerce-app/internal/orders/models"
 	"github.com/ArvRao/ecommerce-app/pkg/database"
 	"gorm.io/gorm"
@@ -21,10 +22,21 @@ func (o *OrderRepositoryImpl) Delete(orderId int) {
 }
 
 // FindAll implements OrderRepository.
-func (o *OrderRepositoryImpl) FindAll() []Orders.Order {
+func (o *OrderRepositoryImpl) FindAll() []responses.OrderResponse {
 	orders := []Orders.Order{}
 	database.DB.Db.Find(&orders)
-	return orders
+	var orderResponses []responses.OrderResponse
+	for _, order := range orders {
+		orderResponse := responses.OrderResponse{
+			OrderSum:  int(order.OrderSum),
+			Id:        int(order.UserID),
+			CreatedAt: order.CreatedAt,
+			UpdatedAt: order.UpdatedAt,
+			UserID:    order.UserID,
+		}
+		orderResponses = append(orderResponses, orderResponse)
+	}
+	return orderResponses
 }
 
 // FindById implements OrderRepository.
@@ -41,6 +53,7 @@ func (o *OrderRepositoryImpl) FindById(orderId int) (Orders.Order, error) {
 
 // Save implements OrderRepository.
 func (o *OrderRepositoryImpl) Save(order Orders.Order) {
+
 	database.DB.Db.Create(&order)
 }
 
@@ -55,7 +68,7 @@ type OrderRepository interface {
 	Update(id int, ordersum int) error
 	Delete(orderId int)
 	FindById(orderId int) (Orders.Order, error)
-	FindAll() []Orders.Order
+	FindAll() []responses.OrderResponse
 }
 
 func NewOrderRepositoryImpl(db *gorm.DB) OrderRepository {
