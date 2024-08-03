@@ -62,9 +62,10 @@ func (*Admin) Login(c *fiber.Ctx) error {
 	defer DB.CloseDb(db)
 
 	body := new(model.Admin)
-	// take data from req
 	if err := c.BodyParser(body); err != nil {
-		return c.Status(500).SendString(err.Error())
+		return c.Status(500).JSON(fiber.Map{
+			"message": err.Error(),
+		})
 	}
 
 	err := utils.ValidateStruct(body)

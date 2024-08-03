@@ -7,6 +7,7 @@ import (
 	"github.com/ArvRao/ecommerce-app/routes"
 	utils "github.com/ArvRao/ecommerce-app/utils"
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/logger"
 )
 
 func init() {
@@ -18,6 +19,7 @@ func init() {
 func main() {
 
 	app := fiber.New()
+	app.Use(logger.New())
 
 	routes.AdminRoute(app)
 

@@ -21,14 +21,12 @@ func NewToken() I.IToken {
 func (*token) GenJwtToken(role string, userId uint, duration int) (string, string) {
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
-
 		"role": role,
 		"sub":  userId,
 		"exp":  time.Now().Add(time.Second * time.Duration(duration)).Unix(),
 	})
 
-	fmt.Println(token.Valid)
-	fmt.Println(token.Valid)
+	fmt.Println("validity", token.Valid)
 	tokenString, err := token.SignedString([]byte(os.Getenv("SECRET")))
 	fmt.Println(tokenString)
 	if err != nil {

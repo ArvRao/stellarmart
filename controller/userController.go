@@ -25,7 +25,6 @@ func NewUserFunc() I.IUser {
 }
 
 func (*User) UserSignup(c *fiber.Ctx) error {
-
 	db := DB.OpenDb()
 	defer DB.CloseDb(db)
 
@@ -33,7 +32,6 @@ func (*User) UserSignup(c *fiber.Ctx) error {
 	if err := c.BodyParser(user); err != nil {
 		return c.Status(500).SendString(err.Error())
 	}
-
 	if err := utils.ValidateStruct(user); err != nil {
 		return c.Status(http.StatusBadRequest).JSON(fiber.Map{
 			"message": err.Error(),
@@ -51,60 +49,30 @@ func (*User) UserSignup(c *fiber.Ctx) error {
 		})
 	}
 
-	fmt.Println("+" + user.CountryCode + user.Phone)
-
-	// utils.SendOtp(("+" + user.CountryCode + user.Phone))
-
-	OTP := strconv.FormatUint(uint64(uuid.New().ID()), 10)[:6]
-
-	user.OTP = OTP
-
 	hash, err := bcrypt.GenerateFromPassword([]byte(user.Password), 10)
 	if err != nil {
 		return c.Status(http.StatusInternalServerError).JSON(fiber.Map{
 			"message": "not able to hash pasword",
 		})
-
 	}
-	fmt.Println("hash", hash)
-
+	fmt.Println("hash password: ", hash)
 	user.Password = string(hash)
-
 	res := db.Save(&user)
-
 	if res.Error != nil {
 		return c.Status(http.StatusInternalServerError).JSON(fiber.Map{
 			"message": "failed to create account",
 		})
-
-	}
-
-	if true {
-		stst := utils.SendOtp("+" + user.CountryCode + user.Phone)
-		if stst {
-			fmt.Println("otp sent sccessfully")
-		}
-
-	} else {
-		err = utils.SendSMSOTP(("+" + user.CountryCode + user.Phone), OTP)
-		if err != nil {
-			fmt.Println(err)
-
-		}
-
 	}
 
 	address.UserId = user.ID
-
 	res = db.Save(&address)
 
 	if res.Error != nil {
 		return c.Status(http.StatusInternalServerError).JSON(fiber.Map{
 			"message": "failed to create account",
 		})
-
 	}
-	return c.Status(200).SendString("account created")
+	return c.Status(200).SendString("account created" + user.Username)
 }
 
 func (*User) UserLogin(c *fiber.Ctx) error {
@@ -121,15 +89,14 @@ func (*User) UserLogin(c *fiber.Ctx) error {
 	db.First(&usr, "username = ?", body.Username)
 	if usr.ID == 0 {
 		return c.Status(http.StatusUnauthorized).JSON(fiber.Map{
-			"message": "invalid  usermame or password",
+			"message": "invalid  username or password",
 		})
 	}
 
 	err := bcrypt.CompareHashAndPassword([]byte(usr.Password), []byte(body.Password))
 	if err != nil {
-
 		return c.Status(http.StatusBadRequest).JSON(fiber.Map{
-			"message": "incorrect  password!",
+			"message": "invalid  username or password",
 		})
 	}
 
@@ -138,8 +105,7 @@ func (*User) UserLogin(c *fiber.Ctx) error {
 			"message": "you have been restricted",
 		})
 	}
-	if usr.Blocked == true {
-
+	if usr.Blocked {
 		return c.Status(http.StatusBadRequest).JSON(fiber.Map{
 			"message": "please contact admin",
 		})
@@ -151,8 +117,7 @@ func (*User) UserLogin(c *fiber.Ctx) error {
 
 	err = db.Model(&usr).Where("id = ?", usr.ID).Update("refresh", uuidv4.String()).Error
 	if err != nil {
-		fmt.Println(err)
-
+		fmt.Println("err", err)
 	}
 
 	tokenString, errMessage := Token.GenJwtToken("user", usr.ID, 86400)
@@ -161,7 +126,7 @@ func (*User) UserLogin(c *fiber.Ctx) error {
 			"message": errMessage,
 		})
 	}
-	fmt.Println(tokenString)
+	fmt.Println("tokenString", tokenString)
 	if err != nil {
 
 		_ = utils.InternalServerError("Issue generating token", c)
@@ -170,6 +135,13 @@ func (*User) UserLogin(c *fiber.Ctx) error {
 	return c.Status(http.StatusOK).JSON(fiber.Map{
 		"access_tokem":  tokenString,
 		"refresh_token": uuidv4,
+		"user": struct {
+			Username string `json:"username"`
+			Email    string `json:"email"`
+		}{
+			Username: usr.Username,
+			Email:    usr.Email,
+		},
 	})
 
 }
@@ -178,9 +150,8 @@ func (*User) Home(c *fiber.Ctx) error {
 
 	user := c.Locals("id")
 	fmt.Println(user)
-	fmt.Println("Helo")
-
-	return nil
+	fmt.Println("Welcome to stellarmart home page!!")
+	return c.Status(200).SendString("Welcome to stellarmart")
 }
 
 func (*User) Verification(c *fiber.Ctx) error {
@@ -672,5 +643,5 @@ func (*User) RemoveFromCart(c *fiber.Ctx) error {
 }
 
 func (*User) First(c *fiber.Ctx) error {
-	return c.Status(200).SendString(" please visit - https://github.com/mohdjishin/GooCart")
+	return c.Status(200).SendString(" please visit - https://github.com/ArvRao")
 }

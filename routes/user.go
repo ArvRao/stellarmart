@@ -11,11 +11,11 @@ var u = controller.NewUserFunc()
 
 func UserRoute(app *fiber.App) {
 
-	app.Get("/", u.First)
+	app.Get("/", middleware.RequreUserAuth, u.First)
 
-	app.Get("/metrics", monitor.New(monitor.Config{Title: "GoCart Metrics Page"}))
-	app.Post("/user/registration", u.UserSignup) //json
-	app.Post("/user/login", u.UserLogin)         //json
+	app.Get("/metrics", monitor.New(monitor.Config{Title: "StellarMart Metrics Page"}))
+	app.Post("/user/registration", u.UserSignup)
+	app.Post("/user/login", u.UserLogin) //json
 	app.Post("/user/refresh", u.Refresh)
 
 	user := app.Group("/user", middleware.RequreUserAuth)

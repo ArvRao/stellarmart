@@ -105,9 +105,7 @@ func RequreUserAuth(c *fiber.Ctx) error {
 	})
 
 	if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
-
 		if claims["role"] != "user" {
-
 			return c.Status(http.StatusUnauthorized).JSON(fiber.Map{
 				"message": "no user privileges",
 			})
@@ -118,17 +116,15 @@ func RequreUserAuth(c *fiber.Ctx) error {
 		}
 
 		user := new(model.Users)
-
 		db.First(&user, claims["sub"])
-
 		if user.ID == 0 {
 			return c.Status(http.StatusUnauthorized).JSON(fiber.Map{
 				"message": "user not found",
 			})
-
 		}
 
 		c.Locals("id", user.ID)
+		fmt.Println("user with id:", user.ID)
 
 		err = c.Next()
 		if err != nil {
